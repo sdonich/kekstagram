@@ -61,74 +61,82 @@ function getUsersPhoto(user) {
 
 function appendPicture() {
   createUsers();
-  users.forEach(function(item) {
-    picturesContainer.appendChild(getUsersPhoto(item));
-  })
+
+  for(let i = 0; i < users.length; i++) {
+    let userPhoto = getUsersPhoto(users[i]); 
+    picturesContainer.appendChild(userPhoto);
+
+    picturesContainer.children[i].addEventListener('click', function(evt) {
+      evt.preventDefault();
+      creatGallery(users[i]);
+    });
+  }
 }
 
-function creatGallery() {
+function creatGallery(user) {
   let gallery = document.querySelector('.gallery-overlay');
   let galleryImage = gallery.querySelector('.gallery-overlay-image');
   let galleryCommentsCount = gallery.querySelector('.comments-count');
   let galleryLikesCount = gallery.querySelector('.likes-count')
-  galleryImage.src = users[0].url;
-  galleryCommentsCount.textContent = users[0].comments.length;
-  galleryLikesCount.textContent = users[0].likes;
+  let closePicture = document.querySelector('.gallery-overlay-close');
+
+  closePicture.addEventListener('click', function() {
+    gallery.classList.add('hidden');
+
+  })
+
+  galleryImage.src = user.url;
+  galleryCommentsCount.textContent = user.comments.length;
+  galleryLikesCount.textContent = user.likes;
   gallery.classList.remove('hidden');
 }
 
 appendPicture();
-// creatGallery();
 
 let uploadFile = document.querySelector('.upload-input');
 let pictureEditor = document.querySelector('.upload-overlay');
 let closePictureEditor = document.querySelector('.upload-form-cancel');
 let pinEditor = document.querySelector('.upload-effect-level-pin');
-// console.log(closePictureEditor);
 
+function filterSaturation(max) {
+  let x = 80;
+  let index = (max * x) / 100;
+
+  return index;
+}
 
 let filterPreview = {
-  'grayscale': 'grayscale',
-  'sepia': 'sepia',
-  'invert': 'invert',
-  'blur': 'blur',
-  'brightness': 'brightness',
+  'grayscale': `grayscale(${filterSaturation(1)})`,
+  'sepia': `sepia(${filterSaturation(1)})`,
+  'invert': `invert(${filterSaturation(100)}%)`,
+  'blur': `blur(${filterSaturation(3)}px)`,
+  'brightness': `brightness(${filterSaturation(3)})`,
   'original': 'none'
 };
 
 let filters = document.querySelectorAll('.upload-effect-label');
 
-
 uploadFile.addEventListener('change', function() {
-  // console.log('h');
   pictureEditor.classList.remove('hidden');
 
   closePictureEditor.addEventListener('click', function() {
     pictureEditor.classList.add('hidden');
   })
   
-  pinEditor.addEventListener('mouseup', function() {
-    // console.log('hello');
-  });
-
   for(let i = 0; i < filters.length; i++) {
     filters[i].addEventListener('click', filtersHandler);
   }
 });
 
-
-
 function filtersHandler(evt) {
-  console.log(evt.target);
-  let attribute = evt.target.getAttribute('filter');
-  console.log(attribute);
-  // console.dir(evt.target.firstElementChild);
-  // let xxx = evt.target.textContent;
-  // let xxx = document.querySelector('.upload-effect-label').textContent;
-  // console.log(xxx === ' Оригинал ');
-  // console.log(filterPreview[xxx]);
-  // console.log(xxx);
+  let imagePreview = document.querySelector('.effect-image-preview');
+  let preview = evt.target;
+  let attribute = preview.getAttribute('filter');
+  
+  imagePreview.style.filter = `${filterPreview[attribute]}`;
 }
+
+
 
 
 
