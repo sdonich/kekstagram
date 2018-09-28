@@ -78,7 +78,60 @@ function creatGallery() {
 }
 
 appendPicture();
-creatGallery();
+// creatGallery();
+
+let uploadFile = document.querySelector('.upload-input');
+let pictureEditor = document.querySelector('.upload-overlay');
+let closePictureEditor = document.querySelector('.upload-form-cancel');
+let pinEditor = document.querySelector('.upload-effect-level-pin');
+// console.log(closePictureEditor);
+
+
+let filterPreview = {
+  'grayscale': 'grayscale',
+  'sepia': 'sepia',
+  'invert': 'invert',
+  'blur': 'blur',
+  'brightness': 'brightness',
+  'original': 'none'
+};
+
+let filters = document.querySelectorAll('.upload-effect-label');
+
+
+uploadFile.addEventListener('change', function() {
+  // console.log('h');
+  pictureEditor.classList.remove('hidden');
+
+  closePictureEditor.addEventListener('click', function() {
+    pictureEditor.classList.add('hidden');
+  })
+  
+  pinEditor.addEventListener('mouseup', function() {
+    // console.log('hello');
+  });
+
+  for(let i = 0; i < filters.length; i++) {
+    filters[i].addEventListener('click', filtersHandler);
+  }
+});
+
+
+
+function filtersHandler(evt) {
+  console.log(evt.target);
+  let attribute = evt.target.getAttribute('filter');
+  console.log(attribute);
+  // console.dir(evt.target.firstElementChild);
+  // let xxx = evt.target.textContent;
+  // let xxx = document.querySelector('.upload-effect-label').textContent;
+  // console.log(xxx === ' Оригинал ');
+  // console.log(filterPreview[xxx]);
+  // console.log(xxx);
+}
+
+
+
 
 
 
