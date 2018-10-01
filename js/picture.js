@@ -136,6 +136,44 @@ function filtersHandler(evt) {
   imagePreview.style.filter = `${filterPreview[attribute]}`;
 }
 
+let hashtagsForm = document.querySelector('.upload-form-hashtags');
+let form = document.querySelector('.upload-form');
+
+form.addEventListener('submit', function(evt) {
+  evt.preventDefault();
+  let hashtags = hashtagsForm.value;
+  let correctHashtags = checkHashtag(hashtags);
+  
+  hashtagsForm.value = correctHashtags.join(' ');
+
+})
+
+
+function unique(arr) {
+  let obj = {};
+
+  for (let i = 0; i < arr.length; i++) {
+    let str = arr[i];
+    obj[str] = true; 
+  }
+
+  return Object.keys(obj); 
+}
+
+
+
+function checkHashtag(hashtag) {
+
+  let hashArray = hashtag.split(' ').map(function(item) {
+    if(item[0] !== '#') {
+      return `#${item.toLowerCase()}`;
+    }
+    return item.toLowerCase();
+  });
+
+  return unique(hashArray);
+  
+}
 
 
 
