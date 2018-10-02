@@ -23,15 +23,16 @@
 
   let filters = document.querySelectorAll('.upload-effect-label');
   
-  // добавлено
+  // добавлено 1
   let pinValue = document.querySelector('.upload-effect-level-value');
   let pinLine = document.querySelector('.upload-effect-level-line');
   let pin = document.querySelector('.upload-effect-level-pin');
   let lineValue = document.querySelector('.upload-effect-level-val');
-  // добавлено
+  // добавлено 1
 
   uploadFile.addEventListener('change', function() {
     pictureEditor.classList.remove('hidden');
+    pin.style.left = '0%';
 
     closePictureEditor.addEventListener('click', function() {
       pictureEditor.classList.add('hidden');
@@ -41,20 +42,19 @@
       filters[i].addEventListener('click', filtersHandler);
     }
 
-    // добавлено
+    // добавлено 2
     pin.addEventListener('mousedown', function(evt) {
-      console.log(evt.target.style.left);
-      let xxx = evt.target;
-      
+      let startCoordsX = evt.clientX;
+    
       document.addEventListener('mousemove', function(moveEvt) {
-        console.log(moveEvt.clientX);
-        console.log(moveEvt.clientY);
-
+        let shiftX = moveEvt.clientX - startCoordsX;
+        pin.style.left = `${shiftX}px`;
+        console.log(pin.style.left);
       })
 
     });
 
-    // добавлено
+    // добавлено 2
   });
 
   function filtersHandler(evt) {
