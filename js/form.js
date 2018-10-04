@@ -28,6 +28,7 @@
   let pinLine = document.querySelector('.upload-effect-level-line');
   let pin = document.querySelector('.upload-effect-level-pin');
   let lineValue = document.querySelector('.upload-effect-level-val');
+  let pinDiv = document.querySelector('.upload-effect-level');
   // добавлено 1
 
   uploadFile.addEventListener('change', function() {
@@ -43,16 +44,45 @@
     }
 
     // добавлено 2
-    pin.addEventListener('mousedown', function(evt) {
-      let startCoordsX = evt.clientX;
-    
-      document.addEventListener('mousemove', function(moveEvt) {
-        let shiftX = moveEvt.clientX - startCoordsX;
-        pin.style.left = `${shiftX}px`;
-        console.log(pin.style.left);
-      })
 
-    });
+    function mouseDown() {
+      let startCoordsX = pin.getBoundingClientRect().left;
+      console.log(pinLine.getBoundingClientRect().left);
+      console.log(pinLine.getBoundingClientRect().right);
+
+      console.log(pin.getBoundingClientRect().left);
+
+
+      function mouseMove(moveEvt) {
+        let shiftX = moveEvt.clientX - startCoordsX;
+        startCoordsX = moveEvt.clientX;
+        pin.style.left = `${pin.offsetLeft + shiftX}px`;
+      }
+      function mouseUp() {
+        document.removeEventListener('mousemove', mouseMove);
+        document.removeEventListener('mouseup', mouseUp);
+      }
+
+      document.addEventListener('mousemove', mouseMove);
+      document.addEventListener('mouseup', mouseUp);
+    }
+
+    pin.addEventListener('mousedown', mouseDown); 
+
+      
+
+    
+      // document.addEventListener('mousemove', function(moveEvt) {
+      //   // console.log(` move ${moveEvt.clientX}`);
+      //   let shiftX = moveEvt.clientX - startCoordsX;
+      //   pin.style.left = `${shiftX}px`;
+      //   // console.log(pin.style.left);
+      // });
+      // document.addEventListener('mouseup', function() {
+      //   startCoordsX = evt.clientX;
+      // });
+
+    
 
     // добавлено 2
   });
