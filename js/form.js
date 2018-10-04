@@ -23,42 +23,61 @@
 
   let filters = document.querySelectorAll('.upload-effect-label');
   
-  // добавлено 1
   let pinValue = document.querySelector('.upload-effect-level-value');
   let pinLine = document.querySelector('.upload-effect-level-line');
   let pin = document.querySelector('.upload-effect-level-pin');
   let lineValue = document.querySelector('.upload-effect-level-val');
   let pinDiv = document.querySelector('.upload-effect-level');
-  // добавлено 1
 
   uploadFile.addEventListener('change', function() {
     pictureEditor.classList.remove('hidden');
     pin.style.left = '0%';
+    // console.log(pin.getBoundingClientRect().right);
+    console.log(pin.clientWidth);
 
-    closePictureEditor.addEventListener('click', function() {
+    function closePictureHandler() {
       pictureEditor.classList.add('hidden');
-    })
-    
-    for(let i = 0; i < filters.length; i++) {
-      filters[i].addEventListener('click', filtersHandler);
+      pin.removeEventListener('mousedown', mouseDown);
+      closePictureEditor.removeEventListener('click', closePictureHandler);
     }
-
-    // добавлено 2
 
     function mouseDown() {
       let startCoordsX = pin.getBoundingClientRect().left;
-      console.log(pinLine.getBoundingClientRect().left);
-      console.log(pinLine.getBoundingClientRect().right);
+      // console.log(pinLine.getBoundingClientRect().left);
+      // console.log(pinLine.getBoundingClientRect().right);
+      // console.log(pin.getBoundingClientRect().left);
+      console.log(pinLine.clientWidth);
+      // console.log(pin.style.left);
 
-      console.log(pin.getBoundingClientRect().left);
 
 
       function mouseMove(moveEvt) {
         let shiftX = moveEvt.clientX - startCoordsX;
         startCoordsX = moveEvt.clientX;
-        pin.style.left = `${pin.offsetLeft + shiftX}px`;
+
+        if(pin.offsetLeft + shiftX < pinLine.clientWidth) {
+          pin.style.left = `${pin.offsetLeft + shiftX}px`;
+        }
+          // console.log(pin.offsetLeft + shiftX);
+        // }else{
+        //   // moveEvt.stopPropagation();
+        //   // mouseUp();
+         
+        //   // console.log((pinLine.clientWidth + pinLine.getBoundingClientRect().left) + pin.clientWidth / 2);
+        //   // console.log(pin.getBoundingClientRect().right);
+
+        // }  
+
+        
+        // console.log(pin.style.left);
+        // console.log(pin.offsetLeft + shiftX);
+        // console.log(pinLine.getBoundingClientRect().right);
+        // console.log(pin.getBoundingClientRect().right);
+        
+
       }
-      function mouseUp() {
+      function mouseUp(evtUp) {
+        evtUp.preventDefault();
         document.removeEventListener('mousemove', mouseMove);
         document.removeEventListener('mouseup', mouseUp);
       }
@@ -67,24 +86,12 @@
       document.addEventListener('mouseup', mouseUp);
     }
 
+    for(let i = 0; i < filters.length; i++) {
+      filters[i].addEventListener('click', filtersHandler);
+    }
+
+    closePictureEditor.addEventListener('click', closePictureHandler);
     pin.addEventListener('mousedown', mouseDown); 
-
-      
-
-    
-      // document.addEventListener('mousemove', function(moveEvt) {
-      //   // console.log(` move ${moveEvt.clientX}`);
-      //   let shiftX = moveEvt.clientX - startCoordsX;
-      //   pin.style.left = `${shiftX}px`;
-      //   // console.log(pin.style.left);
-      // });
-      // document.addEventListener('mouseup', function() {
-      //   startCoordsX = evt.clientX;
-      // });
-
-    
-
-    // добавлено 2
   });
 
   function filtersHandler(evt) {
