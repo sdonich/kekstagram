@@ -22,18 +22,20 @@
   };
 
   let filters = document.querySelectorAll('.upload-effect-label');
-  
-  let pinValue = document.querySelector('.upload-effect-level-value');
-  let pinLine = document.querySelector('.upload-effect-level-line');
   let pin = document.querySelector('.upload-effect-level-pin');
-  let lineValue = document.querySelector('.upload-effect-level-val');
-  let pinDiv = document.querySelector('.upload-effect-level');
+  let pinBox = document.querySelector('.upload-effect-level');
+
+  function getCoords(elem) {
+    let box = elem.getBoundingClientRect();
+
+    return {
+      left: box.left
+    };
+  }
 
   uploadFile.addEventListener('change', function() {
     pictureEditor.classList.remove('hidden');
-    pin.style.left = '0%';
-    // console.log(pin.getBoundingClientRect().right);
-    console.log(pin.clientWidth);
+    pin.style.left = '0px';
 
     function closePictureHandler() {
       pictureEditor.classList.add('hidden');
@@ -41,49 +43,61 @@
       closePictureEditor.removeEventListener('click', closePictureHandler);
     }
 
-    function mouseDown() {
-      let startCoordsX = pin.getBoundingClientRect().left;
-      // console.log(pinLine.getBoundingClientRect().left);
-      // console.log(pinLine.getBoundingClientRect().right);
-      // console.log(pin.getBoundingClientRect().left);
-      console.log(pinLine.clientWidth);
-      // console.log(pin.style.left);
+    pin.ondragstart = function() {
+      return false;
+    };
+
+    function mouseDown(evt) {
+      evt.preventDefault();
+
+      let thumbCoords = getCoords(pin);
+      let sliderCoords = getCoords(pinBox);
+      // console.log(thumbCoords.left);
+      // console.log(sliderCoords.left);
+      console.log(pin.getBoundingClientRect().left);
 
 
+      
+      let shiftX = pin.clientWidth;
+      console.log(shiftX);
 
       function mouseMove(moveEvt) {
-        let shiftX = moveEvt.clientX - startCoordsX;
-        startCoordsX = moveEvt.clientX;
+        moveEvt.preventDefault();
+        console.log(pin.getBoundingClientRect().left);
 
-        if(pin.offsetLeft + shiftX < pinLine.clientWidth) {
-          pin.style.left = `${pin.offsetLeft + shiftX}px`;
+
+        let newLeft = moveEvt.pageX - shiftX - sliderCoords.left;
+        // console.log(sliderCoords.left);
+        // console.log(newLeft);
+
+        if(newLeft < 0) {
+          newLeft = 0;
         }
-          // console.log(pin.offsetLeft + shiftX);
-        // }else{
-        //   // moveEvt.stopPropagation();
-        //   // mouseUp();
-         
-        //   // console.log((pinLine.clientWidth + pinLine.getBoundingClientRect().left) + pin.clientWidth / 2);
-        //   // console.log(pin.getBoundingClientRect().right);
 
-        // }  
-
+        // let rightEdge = pinBox.clientWidth - shiftX;
+        let rightEdge = 455;
         
-        // console.log(pin.style.left);
-        // console.log(pin.offsetLeft + shiftX);
-        // console.log(pinLine.getBoundingClientRect().right);
-        // console.log(pin.getBoundingClientRect().right);
-        
+        // console.log(pinBox.offsetWidth);
+        // console.log(pinBox.clientWidth);
 
-      }
+        // console.log(pin.offsetWidth);
+
+        if (newLeft > rightEdge) {
+          newLeft = rightEdge;
+        }
+        pin.style.left = `${newLeft}px`;
+      };
+      
       function mouseUp(evtUp) {
         evtUp.preventDefault();
         document.removeEventListener('mousemove', mouseMove);
         document.removeEventListener('mouseup', mouseUp);
-      }
+        return false;
+      }  
 
       document.addEventListener('mousemove', mouseMove);
       document.addEventListener('mouseup', mouseUp);
+      return false;
     }
 
     for(let i = 0; i < filters.length; i++) {
