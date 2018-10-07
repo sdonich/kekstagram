@@ -361,6 +361,8 @@ input[type=radio]:checked + .upload-effect-label .upload-effect-preview {
   background: rgba(0, 0, 0, 0.6);
   border-radius: 33px;
   transform: translateX(-50%);
+
+  display: none;
 }
 
 .upload-effect-level-line {
@@ -369,7 +371,7 @@ input[type=radio]:checked + .upload-effect-label .upload-effect-preview {
   right: 20px;
   left: 20px;
 
-  height: 5px;
+  height: 7px;
 
   background: rgba(255, 231, 81, 0.4);
   transform: translateY(-50%);
@@ -394,7 +396,6 @@ input[type=radio]:checked + .upload-effect-label .upload-effect-preview {
 .upload-effect-level-val {
   position: absolute;
 
-  width: 20%;
   height: 100%;
 
   background: #ffe753;
