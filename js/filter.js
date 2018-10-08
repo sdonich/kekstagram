@@ -148,10 +148,6 @@
   function pinLineHandler(evt) {
     evt.preventDefault();
     setFilter(evt);
-
-    // setInterval(function() {
-    //   console.log('hello');
-    // }, 1000);
   }
   pinLine.addEventListener('click', pinLineHandler);
 
