@@ -1,7 +1,14 @@
 'use strict';
 
 (function() {
-  let USERS_MAX = 25;
+  let USERS_PICTURE_MAX = 25;
+  let USER_DEFAULT = {
+    url: 'photos/fail.jpg',
+    comments: [],
+    likes: 0
+  }
+
+  let users = [];
   let template = document.querySelector('template').content;
   let picturesContainer = document.querySelector('.pictures');
 
@@ -10,7 +17,7 @@
     let pictureImg = picture.querySelector('img');
     let pictureLikes = picture.querySelector('.picture-stats .picture-likes');
     let pictureComments = picture.querySelector('.picture-stats .picture-comments');
-
+    
     pictureImg.src = user.url;
     pictureLikes.textContent = user.likes;
     pictureComments.textContent = user.comments.length;
@@ -18,41 +25,38 @@
     return picture;
   }
 
-  function appendPicture() {
-    let users = [];
+  function setPicture(response) {
+    let usersNumber = USERS_PICTURE_MAX;
 
-    window.backend.load(function(response) {
+    if(response) {
       users = response.slice();
+      usersNumber = users.length;
+    }
 
-      for(let i = 0; i < users.length; i++) {
-        let userPhoto = getUsersPhoto(users[i]);
-        picturesContainer.appendChild(userPhoto);
-        picturesContainer.children[i].addEventListener('click', function(evt) {
-          evt.preventDefault();
-          window.creatGallery(users[i]);
-        });
+    for(let i = 0; i < usersNumber; i++) {
+      let user = USER_DEFAULT;;
+
+      if(response) {
+        user = users[i];
       }
 
-    }, function(error) {
-      let picture = template.cloneNode(true);
-      let pictureImg = picture.querySelector('img');
-      let pictureLikes = picture.querySelector('.picture-stats .picture-likes');
-      let pictureComments = picture.querySelector('.picture-stats .picture-comments');
-  
-      pictureImg.src = user.url;
-      pictureLikes.textContent = user.likes;
-      pictureComments.textContent = user.comments.length;
-  
-      return picture;
+      picturesContainer.appendChild(getUsersPhoto(user));
 
-    });
-
-
-
-
-    
+      picturesContainer.children[i].addEventListener('click', function(evt) {
+        evt.preventDefault();
+        window.creatGallery(user);
+      });
+    }
   }
 
+  function appendPicture() {
+    window.backend.load(function(response) {
+      setPicture(response);
+    }, function(error) {
+      setPicture();
+      window.notice.error(error);
+    });
+  }
   appendPicture();
 })();
 

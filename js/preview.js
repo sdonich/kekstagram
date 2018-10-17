@@ -1,11 +1,13 @@
 'use strict';
 
 (function(global) {
+
   let gallery = document.querySelector('.gallery-overlay');
   let galleryImage = gallery.querySelector('.gallery-overlay-image');
   let galleryCommentsCount = gallery.querySelector('.comments-count');
   let galleryLikesCount = gallery.querySelector('.likes-count')
   let closePicture = document.querySelector('.gallery-overlay-close');
+
 
   global.creatGallery = function(user) {
     closePicture.addEventListener('click', function() {

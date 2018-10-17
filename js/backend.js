@@ -41,6 +41,7 @@
 
       if (xhr.status !== OK_STATUS) {
         onError(error);
+
       } else {
         onLoad(xhr.response);
       }
@@ -54,6 +55,7 @@
     xhr.send();
   }
 
+  // экспортируем функцию
   global.backend = {
     save,
     load
