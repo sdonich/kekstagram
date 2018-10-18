@@ -41,7 +41,6 @@
       }
 
       picturesContainer.appendChild(getUsersPhoto(user));
-
       picturesContainer.children[i].addEventListener('click', function(evt) {
         evt.preventDefault();
         window.creatGallery(user);

@@ -2,12 +2,14 @@
 
 (function() {
   let uploadFile = document.querySelector('.upload-input');
+  let filterValue = document.querySelector('.upload-effect-level-value');
   let pictureEditor = document.querySelector('.upload-overlay');
   let closePictureEditor = document.querySelector('.upload-form-cancel');
 
   function filterSaturation(filter, value) {
     let index = (filterPreview[filter].max * value) / 100;
 
+    filterValue.value = index;
     return `${filterPreview[filter].set}(${index}${filterPreview[filter].unit})`;
   }
 
@@ -37,7 +39,7 @@
       startValue: 0
     },
     'brightness': {
-      set: `brightness`,
+      set: `brightness`, 
       max: 3,
       unit: ' ',
       startValue: 33
@@ -45,29 +47,21 @@
     'original': 'none'
   };
 
+  //фильтры
   let filters = document.querySelectorAll('.upload-effect-label');
+  let filterAttribute = filterPreview.original;
+  let imagePreview = document.querySelector('.effect-image-preview');
+
+
+  //бегунок
+  let filterEditorLine = document.querySelector('.upload-effect-level');
   let pinLine = document.querySelector('.upload-effect-level-line');
   let pin = document.querySelector('.upload-effect-level-pin');
   let valLine = document.querySelector('.upload-effect-level-val');
-  let filterAttribute = filterPreview.original;
-  let imagePreview = document.querySelector('.effect-image-preview');
-  let filterEditorLine = document.querySelector('.upload-effect-level');
 
-  function getCoords(elem) {
-    let box = elem.getBoundingClientRect();
-
-    return {
-      left: box.left,
-      right: box.right
-    };
-  }
-  function getPercent(value, max) {
-    let receivedValue = value * 100 / max;
-    return Math.round(receivedValue);
-  }
-
+  //изменение редактора фильтра
   function setFilter(evt) {
-    let line = getCoords(pinLine);
+    let line = window.utils.getCoords(pinLine);
     let valueMax = line.right - line.left;
     let shiftX = evt.pageX - line.left;
 
@@ -80,11 +74,12 @@
     }
 
     pin.style.left = `${shiftX}px`;
-    let value = getPercent(shiftX, valueMax);
+    let value = window.utils.getPercent(shiftX, valueMax);
     valLine.style.width = `${value}%`;
     imagePreview.style.filter = filterSaturation(filterAttribute, value);
   }
 
+  // подвеска обработчика события на выбор фотографии
   uploadFile.addEventListener('change', function() {
     pictureEditor.classList.remove('hidden');
     pin.style.left = '0px';
@@ -140,8 +135,8 @@
       valLine.style.width = '33%';
     }else{
       imagePreview.style.filter = filterSaturation(filterAttribute, filterPreview[filterAttribute].startValue);
-      pin.style.left = `0px`;
-      valLine.style.width = `0%`;
+      pin.style.left = '0px';
+      valLine.style.width = '0%';
     }
   }
 
