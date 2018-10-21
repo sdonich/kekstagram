@@ -900,3 +900,12 @@ input[type=radio]:checked + .upload-effect-label .upload-effect-preview {
   top: 0px;
   left: 0px;
 }
+
+.hashtag_notice {
+  width: 470px;
+  margin: 0px;
+  padding-left: 65px;
+  position: relative;
+  top: -25px;
+  text-align: left;
+}

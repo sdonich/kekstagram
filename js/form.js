@@ -6,35 +6,46 @@
   let hashtagsForm = document.querySelector('.upload-form-hashtags');
   let form = document.querySelector('.upload-form');
 
+  function hashtagErrorNotice(...error) {
+    let notice = document.createElement('ul');
+    notice.classList.add('hashtag_notice');
+
+    error.forEach(function(item) {
+      if(item) {
+        let message = document.createElement('li');
+        message.textContent = item;
+        notice.append(message);
+      }
+    });
+    return notice;
+  }
+
   form.addEventListener('submit', function(evt) {
     evt.preventDefault();
 
-    let resultChecking = checkHashtag(hashtagsForm.value);
-    console.log(resultChecking);
+    if(document.querySelector('.hashtag_notice')) {
+      document.querySelector('.hashtag_notice').remove();
+    }
 
-    
-    hashtagsForm.value = resultChecking.hashtags;
-    
+    if(hashtagsForm.value !== '') {
+      let resultChecking = checkHashtag(hashtagsForm.value);
+      hashtagsForm.value = resultChecking.hashtags;
 
-    // let xxx = new FormData(form);
-    // for (let key of xxx.values()) {
-    //   console.log(key);
-    // }
+      if(resultChecking.hashtagLength || resultChecking.lengthError) {
+        let errorNotice = hashtagErrorNotice(resultChecking.hashtagLength, resultChecking.lengthError);
+        hashtagsForm.after(errorNotice);
+        
+        return false;
+      }
+    }
+
+    window.backend.save(new FormData(form), function() {
+      window.notice.succes();
+    }, window.notice.error);
   })
-
-  // formNotice.addEventListener('submit', function (evt) {
-  //   evt.preventDefault();
-
-  //   window.backend.save(new FormData(formNotice), function () {
-  //     window.notice.succes();
-  //     resetSet();
-  //   },
-  //   window.notice.error);
-  // });
 
   // проверка hashtag
  
-
   function checkHashtag(hashtag) {
     if(!hashtag) {
       return false;
@@ -53,7 +64,7 @@
       if(item === '#') {
         return false;
       }else if(item.length > 21) {
-        hashtagLength = 'Количество символов в одном хэштеге не должно быть больше 20';
+        hashtagLength = 'Количество символов в одном хэштеге не должно быть больше 20!';
       }
       return true;
     });
@@ -62,7 +73,7 @@
     let hashtagsUnique = window.utils.unique(hashArray);
 
     if(hashtagsUnique.length > HASHTAG_MAX) {
-      lengthError = 'Введите не больше 5 хэштегов';
+      lengthError = 'Введите не больше 5 хэштегов!';
     }
 
     return {
