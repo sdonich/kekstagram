@@ -1,11 +1,13 @@
 'use strict';
 
 (function() {
-  let HASHTAG_MAX = 4;
+  let HASHTAGS_MAX = 5;
+  let AMOUNT_MAX = 20;
 
   let hashtagsForm = document.querySelector('.upload-form-hashtags');
   let form = document.querySelector('.upload-form');
 
+  // создание поле ошибки для hashtagForm
   function hashtagErrorNotice(...error) {
     let notice = document.createElement('ul');
     notice.classList.add('hashtag_notice');
@@ -20,6 +22,7 @@
     return notice;
   }
 
+  // обработчик на отправку формы
   form.addEventListener('submit', function(evt) {
     evt.preventDefault();
 
@@ -31,8 +34,8 @@
       let resultChecking = checkHashtag(hashtagsForm.value);
       hashtagsForm.value = resultChecking.hashtags;
 
-      if(resultChecking.hashtagLength || resultChecking.lengthError) {
-        let errorNotice = hashtagErrorNotice(resultChecking.hashtagLength, resultChecking.lengthError);
+      if(resultChecking.hashtagLengthError || resultChecking.amountError) {
+        let errorNotice = hashtagErrorNotice(resultChecking.hashtagLengthError, resultChecking.amountError);
         hashtagsForm.after(errorNotice);
         
         return false;
@@ -41,45 +44,41 @@
 
     window.backend.save(new FormData(form), function() {
       window.notice.succes();
+      form.reset();
     }, window.notice.error);
   })
 
   // проверка hashtag
- 
   function checkHashtag(hashtag) {
-    if(!hashtag) {
-      return false;
-    }
-    let hashtagLength;
+    let hashtagLengthError;
+    let amountError;
 
     let hashArray = hashtag.split(' ').map(function(item) {
       if(item[0] !== '#') {
-        let it = `#${item.toLowerCase()}`;
-
-        return it;
+        return `#${item.toLowerCase()}`;
       }
 
       return item.toLowerCase();
     }).filter(function(item) {
       if(item === '#') {
         return false;
-      }else if(item.length > 21) {
-        hashtagLength = 'Количество символов в одном хэштеге не должно быть больше 20!';
+      }
+      if(item.length > AMOUNT_MAX) {
+        hashtagLengthError = `Количество символов в одном хэштеге не должно быть больше ${AMOUNT_MAX}!`;
       }
       return true;
     });
 
-    let lengthError;
     let hashtagsUnique = window.utils.unique(hashArray);
 
-    if(hashtagsUnique.length > HASHTAG_MAX) {
-      lengthError = 'Введите не больше 5 хэштегов!';
+    if(hashtagsUnique.length > HASHTAGS_MAX) {
+      amountError = `Введите не больше ${HASHTAGS_MAX} хэштегов!`;
     }
 
     return {
       hashtags: hashtagsUnique.join(' '),
-      lengthError,
-      hashtagLength
+      amountError,
+      hashtagLengthError
     }
   }
 })();
