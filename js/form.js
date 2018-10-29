@@ -45,6 +45,8 @@
     window.backend.save(new FormData(form), function() {
       window.notice.succes();
       form.reset();
+      window.hideFilter();
+      document.querySelector('.upload-overlay').classList.add('hidden');
     }, window.notice.error);
   })
 

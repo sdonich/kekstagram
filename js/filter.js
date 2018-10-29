@@ -1,6 +1,6 @@
 'use strict';
 
-(function() {
+(function(global) {
   let uploadFile = document.querySelector('.upload-input');
   let filterValue = document.querySelector('.upload-effect-level-value');
   let pictureEditor = document.querySelector('.upload-overlay');
@@ -79,6 +79,12 @@
     imagePreview.style.filter = filterSaturation(filterAttribute, value);
   }
 
+  //скрыть редактор фильтра
+  global.hideFilter = function() {
+    imagePreview.style.filter = 'none';
+    filterEditorLine.style.display = 'none';
+  }
+
   // подвеска обработчика события на выбор фотографии
   uploadFile.addEventListener('change', function() {
     pictureEditor.classList.remove('hidden');
@@ -87,6 +93,7 @@
 
     function closePictureHandler() {
       pictureEditor.classList.add('hidden');
+      global.hideFilter();
       pin.removeEventListener('mousedown', mouseDown);
       pinLine.removeEventListener('click', pinLineHandler);
       closePictureEditor.removeEventListener('click', closePictureHandler);
@@ -117,7 +124,8 @@
     }
 
     closePictureEditor.addEventListener('click', closePictureHandler);
-    pin.addEventListener('mousedown', mouseDown); 
+    pin.addEventListener('mousedown', mouseDown);
+    pinLine.addEventListener('click', pinLineHandler);
   });
 
   function filtersHandler(evt) {
@@ -127,8 +135,7 @@
     filterAttribute = preview.getAttribute('filter');
 
     if(filterAttribute === 'original') {
-      imagePreview.style.filter = 'none';
-      filterEditorLine.style.display = 'none';
+      global.hideFilter();
     }else if(filterAttribute === 'brightness') {
       imagePreview.style.filter = filterSaturation(filterAttribute, filterPreview[filterAttribute].startValue);
       pin.style.left = '150px';
@@ -144,7 +151,6 @@
     evt.preventDefault();
     setFilter(evt);
   }
-  pinLine.addEventListener('click', pinLineHandler);
 
-})();
+})(window);
 

@@ -1,6 +1,6 @@
 'use strict';
 
-(function() {
+(function(global) {
   let USERS_PICTURE_MAX = 25;
   let USER_DEFAULT = {
     url: 'photos/fail.jpg',
@@ -34,7 +34,7 @@
     }
 
     for(let i = 0; i < usersNumber; i++) {
-      let user = USER_DEFAULT;;
+      let user = USER_DEFAULT;
 
       if(response) {
         user = users[i];
@@ -48,7 +48,7 @@
     }
   }
 
-  function appendPicture() {
+  global.appendPicture = function() {
     window.backend.load(function(response) {
       setPicture(response);
     }, function(error) {
@@ -56,8 +56,8 @@
       window.notice.error(error);
     });
   }
-  appendPicture();
-})();
+  global.appendPicture();
+})(window);
 
 
 
