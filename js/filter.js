@@ -87,6 +87,7 @@
 
   // подвеска обработчика события на выбор фотографии
   uploadFile.addEventListener('change', function() {
+    window.uploadPicture();
     pictureEditor.classList.remove('hidden');
     pin.style.left = '0px';
     valLine.style.width = '0%';

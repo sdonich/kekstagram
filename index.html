@@ -18,9 +18,6 @@
 
   <input type="radio" id="filter-discussed" class="filters-radio" name="filter" value="discussed">
   <label for="filter-discussed" class="filters-item">Обсуждаемые</label>
-
-  <input type="radio" id="filter-random" class="filters-radio" name="filter" value="random">
-  <label for="filter-random" class="filters-item">Случайные</label>
 </form>
 
 <form class="upload-form" id="upload-select-image" method="post" enctype="multipart/form-data" autocomplete="off" action="https://js.dump.academy/kekstagram">
@@ -124,7 +121,6 @@
   </div>
 </footer>
 
-
 <div class="gallery-overlay hidden">
   <span class="gallery-overlay-close">&times;</span>
   <div class="gallery-overlay-preview">
@@ -146,6 +142,8 @@
   </a>
 </template>
 
+<script src="js/debounce.js"></script>
+
 <script src="js/notice.js"></script>
 
 <script src="js/utils.js"></script>
@@ -153,6 +151,8 @@
 <script src="js/backend.js"></script>
 
 <script src="js/preview.js"></script>
+
+<script src="js/file_chooser.js"></script>
 
 <script src="js/filter.js"></script>
 
