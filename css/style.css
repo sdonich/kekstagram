@@ -117,14 +117,24 @@ body {
   text-align: center;
 }
 
+.upload-form-preview {
+  overflow: hidden;
+}
+
 .upload-effect__container {
   position: relative;
+  transform: scale(0);
+}
+
+.upload-effect__container.scale {
+  transition-duration: 0.3s;
+  transform: scale(1);
 }
 
 .upload-effect-preview {
-  background-image: url("../img/upload-default-image.jpg");
   background-repeat: no-repeat;
   background-position: center;
+  background-size: cover;
 }
 
 .upload-effect-label-chrome .upload-effect-preview,
@@ -305,7 +315,7 @@ body {
 
 .effect-image-preview {
   vertical-align: middle;
-  max-width: 600px;
+  max-width: 800px;
 }
 
 .upload-effect-controls input[type=radio] {
@@ -344,7 +354,6 @@ input[type=radio]:checked + .upload-effect-label .upload-effect-preview {
   overflow: hidden;
 
   background-position: center;
-  background-size: 100% auto;
   border: solid 4px transparent;
   border-radius: 5px;
 }

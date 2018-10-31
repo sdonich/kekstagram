@@ -1,7 +1,10 @@
 'use strict';
 
 (function(global) {
+  let TIME_SHOW = 100;
+
   let uploadFile = document.querySelector('.upload-input');
+  let uploadContainer = document.querySelector('.upload-effect__container');
   let filterValue = document.querySelector('.upload-effect-level-value');
   let pictureEditor = document.querySelector('.upload-overlay');
   let closePictureEditor = document.querySelector('.upload-form-cancel');
@@ -94,6 +97,7 @@
 
     function closePictureHandler() {
       pictureEditor.classList.add('hidden');
+      uploadContainer.classList.remove('scale');
       global.hideFilter();
       pin.removeEventListener('mousedown', mouseDown);
       pinLine.removeEventListener('click', pinLineHandler);
@@ -127,6 +131,10 @@
     closePictureEditor.addEventListener('click', closePictureHandler);
     pin.addEventListener('mousedown', mouseDown);
     pinLine.addEventListener('click', pinLineHandler);
+
+    setTimeout(function() {
+      uploadContainer.classList.add('scale');
+    }, TIME_SHOW);
   });
 
   function filtersHandler(evt) {
