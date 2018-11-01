@@ -6,13 +6,20 @@
   let galleryImage = gallery.querySelector('.gallery-overlay-image');
   let galleryCommentsCount = gallery.querySelector('.comments-count');
   let galleryLikesCount = gallery.querySelector('.likes-count')
-  let closePicture = document.querySelector('.gallery-overlay-close');
+  let closeButton = document.querySelector('.gallery-overlay-close');
 
+  function closeGallery() {
+    gallery.classList.add('hidden');
+    document.removeEventListener('keydown', onCloseButtonEscPress);
+  }
+
+  function onCloseButtonEscPress(evt) {
+    window.keyEvent.isEscEvent(evt, closeGallery);
+  }
 
   global.creatGallery = function(user) {
-    closePicture.addEventListener('click', function() {
-      gallery.classList.add('hidden');
-    })
+    closeButton.addEventListener('click', closeGallery);
+    document.addEventListener('keydown', onCloseButtonEscPress);
 
     galleryImage.src = user.url;
     galleryCommentsCount.textContent = user.comments.length;

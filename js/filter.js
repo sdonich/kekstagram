@@ -55,7 +55,6 @@
   let filterAttribute = filterPreview.original;
   let imagePreview = document.querySelector('.effect-image-preview');
 
-
   //бегунок
   let filterEditorLine = document.querySelector('.upload-effect-level');
   let pinLine = document.querySelector('.upload-effect-level-line');
@@ -91,6 +90,7 @@
   // подвеска обработчика события на выбор фотографии
   uploadFile.addEventListener('change', function() {
     window.uploadPicture();
+    global.scaleEditor.setScaleEditorHadler();
     pictureEditor.classList.remove('hidden');
     pin.style.left = '0px';
     valLine.style.width = '0%';
@@ -99,9 +99,27 @@
       pictureEditor.classList.add('hidden');
       uploadContainer.classList.remove('scale');
       global.hideFilter();
+      global.scaleEditor.resetScaleEditor();
+
       pin.removeEventListener('mousedown', mouseDown);
       pinLine.removeEventListener('click', pinLineHandler);
       closePictureEditor.removeEventListener('click', closePictureHandler);
+      document.removeEventListener('keydown', onCloseButtonEscPress);
+    }
+
+    function onCloseButtonEscPress(evt) {
+      window.keyEvent.isEscEvent(evt, function() {
+        let commentField = document.querySelector('.upload-form-description');
+        let hashtagField = document.querySelector('.upload-form-hashtags');
+        
+        if(commentField === document.activeElement) {
+          commentField.blur();
+        }else if(hashtagField === document.activeElement) {
+          hashtagField.blur();
+        }else{
+          closePictureHandler();
+        }
+      });
     }
 
     function mouseDown(evt) {
@@ -129,6 +147,7 @@
     }
 
     closePictureEditor.addEventListener('click', closePictureHandler);
+    document.addEventListener('keydown', onCloseButtonEscPress);
     pin.addEventListener('mousedown', mouseDown);
     pinLine.addEventListener('click', pinLineHandler);
 
@@ -160,6 +179,5 @@
     evt.preventDefault();
     setFilter(evt);
   }
-
 })(window);
 
